@@ -123,6 +123,8 @@ class Game extends React.Component {
     let status = "";
     winner
       ? (status = `winner: ${winner}`)
+      : this.state.history.length === 10
+      ? (status = "平局")
       : (status = `Next player: ${this.state.xIsNext ? "X" : "O"}`);
 
     return (
