@@ -49,11 +49,10 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [{ squares: Array(9).fill(null), newStep: "" }],
+      history: [{ squares: Array(9).fill(null), newStep: "", winnerList: [] }],
       xIsNext: true,
       stepNumber: 0,
       reverseHistory: false,
-      winnerList: [],
     };
   }
 
@@ -66,13 +65,20 @@ class Game extends React.Component {
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState(
       {
-        history: history.concat([{ squares, newStep: `新增步骤：${i}` }]),
+        history: history.concat([
+          { squares, newStep: `新增步骤：${i}`, winnerList: [] },
+        ]),
         stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
       },
       () =>
         calculateWinner(squares, (winnerList) => {
-          !this.state.winnerList.length && this.setState({ winnerList });
+          const history = this.state.history.slice();
+          const current = history[history.length - 1];
+
+          if (current.winnerList.length) return;
+          current.winnerList = winnerList;
+          this.setState({ history });
         })
     );
   }
@@ -124,7 +130,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            winnerList={this.state.winnerList}
+            winnerList={current.winnerList}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
