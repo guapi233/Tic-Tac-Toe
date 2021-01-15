@@ -50,7 +50,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [{ squares: Array(9).fill(null) }],
+      history: [{ squares: Array(9).fill(null), newStep: "" }],
       xIsNext: true,
       stepNumber: 0,
     };
@@ -64,7 +64,7 @@ class Game extends React.Component {
 
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
-      history: history.concat([{ squares }]),
+      history: history.concat([{ squares, newStep: `新增步骤：${i}` }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
@@ -88,6 +88,7 @@ class Game extends React.Component {
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <span style={{ marginLeft: "10px" }}>{step.newStep}</span>
         </li>
       );
     });
